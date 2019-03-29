@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>The Psychic Game</title>
+</head>
+
+<body>
+    <div id="game">
+        <h1>The Psychic Game</h1>
+        <div>Guess what letter I'm thinking of..</div>
+        <div>Wins: <span id="wins">0</span></div>
+        <div>Losses: <span id="losses">0</span></div>
+        <div>Guesses Left: <spann id="left">9</spann>
+        </div>
+        <div>Your guesses so far: <span id="guesses"> </span></div>
+    </div>
+    <script type="text/javascript">
+        var computerLetter = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+        var winsCount = 0;
+        var lossCount = 0;
+        var guessesLeft = 9;
+
+        var userGuessesText = document.getElementById("guesses");
+        var winsText = document.getElementById("wins");
+        var lossesText = document.getElementById("losses");
+        var leftText = document.getElementById("left");
+        var alreadyGuessed = []
+
+        document.onkeyup = function (event) {
+
+            var userGuess = event.key;
+            userGuess.toLowerCase()
+            alreadyGuessed.push(userGuess);
+
+            var computerGuess = computerLetter[Math.floor(Math.random() * computerLetter.length)];
+             if (computerGuess === userGuess) {
+                winsCount++;
+                alreadyGuessed.splice(0, alreadyGuessed.length);
+                guessesLeft = 9;
+                alert("Correct! I was thinking of " + computerGuess + ". You Win!")
+            }
+            else {
+                guessesLeft--;
+            }
+
+            if (guessesLeft === 0) {
+                lossCount++;
+                alreadyGuessed.splice(0, alreadyGuessed.length);
+                guessesLeft = 9;
+                alert("Sorry, I was thinking of " + computerGuess + ", you lost.")
+            }
+
+            leftText.textContent = guessesLeft;
+            userGuessesText.textContent = alreadyGuessed.join('');
+            winsText.textContent = winsCount;
+            lossesText.textContent = lossCount;
+        }
+    </script>
+    <style>
+        #guesses {
+            color: blue;
+        }
+    </style>
+</body>
+
+</html>
