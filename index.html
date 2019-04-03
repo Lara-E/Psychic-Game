@@ -21,6 +21,7 @@
         var winsCount = 0;
         var lossCount = 0;
         var guessesLeft = 9;
+        var computerGuess = computerLetter[Math.floor(Math.random() * computerLetter.length)];
 
         var userGuessesText = document.getElementById("guesses");
         var winsText = document.getElementById("wins");
@@ -28,35 +29,54 @@
         var leftText = document.getElementById("left");
         var alreadyGuessed = []
 
+        function resetRandom() {
+            computerGuess = computerLetter[Math.floor(Math.random() * computerLetter.length)];
+            guessesLeft = 9;
+        }
+        
         document.onkeyup = function (event) {
 
             var userGuess = event.key;
             userGuess.toLowerCase()
-            alreadyGuessed.push(userGuess);
+            
 
-            var computerGuess = computerLetter[Math.floor(Math.random() * computerLetter.length)];
-             if (computerGuess === userGuess) {
+            var isValid = computerLetter.includes(userGuess);
+            var isDuplicate = alreadyGuessed.indexOf(userGuess) > -1;
+            
+            if (isValid === true && isDuplicate === false) {
+                alreadyGuessed.push(userGuess);
+            }
+
+            if (computerGuess === userGuess) {
                 winsCount++;
                 alreadyGuessed.splice(0, alreadyGuessed.length);
-                guessesLeft = 9;
-                alert("Correct! I was thinking of " + computerGuess + ". You Win!")
+                alert("Correct! I was thinking of " + userGuess + ". You Win!");
+                resetRandom();
             }
+
             else {
                 guessesLeft--;
             }
+            
+            if (isValid === false) {
+                alert(userGuess + " isn't a letter. Please Guess a letter.")
+            }
 
+            if (isDuplicate === true) {
+                alert("You already guessed " + userGuess + ", please guess another letter.")
+            }
             if (guessesLeft === 0) {
                 lossCount++;
                 alreadyGuessed.splice(0, alreadyGuessed.length);
-                guessesLeft = 9;
-                alert("Sorry, I was thinking of " + computerGuess + ", you lost.")
+                alert("Sorry, I was thinking of " + computerGuess + ", you lost.");
+                resetRandom()
             }
 
-            leftText.textContent = guessesLeft;
-            userGuessesText.textContent = alreadyGuessed.join('');
-            winsText.textContent = winsCount;
-            lossesText.textContent = lossCount;
-        }
+        leftText.textContent = guessesLeft;
+        userGuessesText.textContent = alreadyGuessed.join('');
+        winsText.textContent = winsCount;
+        lossesText.textContent = lossCount;
+        };
     </script>
     <style>
         #guesses {
